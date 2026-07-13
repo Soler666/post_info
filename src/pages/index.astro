@@ -1,49 +1,332 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
----
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { ViewTransitions } from 'astro:transitions';
 
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+	.filter((p) => !p.data?.draft)
+	.sort((a, b) => {
+		const av = a.data?.pubDate ? new Date(a.data.pubDate as any).valueOf() : 0;
+		const bv = b.data?.pubDate ? new Date(b.data.pubDate as any).valueOf() : 0;
+		return bv - av;
+	});
+
+const featured = posts.slice(0, 1);
+const latest = posts.slice(1, 9);
+const recent = posts.slice(0, 6);
+
+const categories = [
+	{ id: 'ai', label: 'AI' },
+	{ id: '3d', label: '3D Printing' },
+	{ id: 'hw', label: 'Hardware' },
+	{ id: 'latest', label: 'Latest' },
+];
+
+function categoryHref(id: string) {
+	switch (id) {
+		case 'ai':
+			return '/blog/ai/';
+		case '3d':
+			return '/blog/3d-printing/';
+		case 'hw':
+			return '/blog/hardware/';
+		default:
+			return '/blog/';
+	}
+}
+---
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth bg-[#09090b] text-neutral-200 antialiased">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<ViewTransitions />
 	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+
+	<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+		<!-- Ambient layers -->
+		<div class="fixed inset-0 z-0 pointer-events-none bg-[#09090b]" aria-hidden="true" />
+		<div
+			class="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(to_right,rgba(148,163,184,0.10)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.10)_1px,transparent_1px)] bg-[size:28px_28px]"
+			aria-hidden="true"
+		/>
+		<div
+			class="fixed top-[-220px] left-1/2 -translate-x-1/2 z-0 pointer-events-none w-[980px] h-[520px]"
+			style="background: radial-gradient(circle at 50% 60%, rgba(34,211,238,0.22) 0%, rgba(99,102,241,0.14) 34%, rgba(0,0,0,0) 70%);"
+			aria-hidden="true"
+		/>
+		<div
+			class="fixed top-0 right-[-140px] z-0 pointer-events-none w-[560px] h-[560px]"
+			style="background: radial-gradient(circle at 30% 30%, rgba(168,85,247,0.18) 0%, rgba(0,0,0,0) 62%);"
+			aria-hidden="true"
+		/>
+
+		<div class="relative z-50">
+			<Header />
+		</div>
+
+		<main class="flex-grow">
+			<!-- Hero -->
+			<section class="pt-24">
+				<div class="mx-auto max-w-7xl px-6">
+					<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+						<div class="lg:col-span-7">
+							<div class="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl">
+								<div class="absolute inset-0 pointer-events-none">
+									<div class="absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-cyan-400/15 blur-2xl" />
+									<div class="absolute top-10 right-[-160px] h-[420px] w-[420px] rounded-full bg-indigo-400/15 blur-2xl" />
+								</div>
+
+								<div class="relative p-7 md:p-9">
+									<div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1.5 backdrop-blur-md">
+										<span class="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_18px_rgba(34,211,238,0.6)]" aria-hidden="true" />
+										<span class="text-xs font-medium tracking-[0.22em] uppercase text-neutral-400">Next-Gen Makers</span>
+									</div>
+
+									<h1 class="mt-5 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter leading-[1.05] text-white">
+										<span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-300 to-purple-300">Build</span>
+										 with clarity.
+									</h1>
+
+									<p class="mt-4 text-base sm:text-lg text-neutral-300/90 max-w-2xl leading-relaxed">
+										Advanced resin 3D printing diagnostics, AI workflows for creators, and tech hardware notes — curated for makers.
+									</p>
+
+									<div class="mt-7 flex flex-col sm:flex-row gap-3 sm:items-center">
+										<a
+											href="/blog/"
+											class="group inline-flex items-center justify-center rounded-2xl h-12 px-5 border border-white/10 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-md"
+										>
+											<span class="text-sm font-semibold tracking-tight text-white">Explore the magazine</span>
+											<svg class="ml-2 text-cyan-300 transition-transform group-hover:translate-x-0.5" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+												<path d="M5 12h14" />
+												<path d="m12 5 7 7-7 7" />
+											</svg>
+										</a>
+
+										<a
+											href="/about"
+											class="inline-flex items-center justify-center rounded-2xl h-12 px-5 bg-black/30 border border-white/10 hover:bg-black/40 transition-colors"
+										>
+											<span class="text-sm font-semibold tracking-tight text-white/90">Why we exist</span>
+										</a>
+									</div>
+
+									<div class="mt-7 grid grid-cols-3 gap-3">
+										<div class="rounded-2xl border border-white/10 bg-black/20 p-3">
+											<p class="text-xs uppercase tracking-[0.18em] text-neutral-500">Weekly</p>
+											<p class="mt-2 text-sm font-semibold text-white">Briefs</p>
+										</div>
+										<div class="rounded-2xl border border-white/10 bg-black/20 p-3">
+											<p class="text-xs uppercase tracking-[0.18em] text-neutral-500">Action</p>
+											<p class="mt-2 text-sm font-semibold text-white">Takeaways</p>
+										</div>
+										<div class="rounded-2xl border border-white/10 bg-black/20 p-3">
+											<p class="text-xs uppercase tracking-[0.18em] text-neutral-500">AdSense</p>
+											<p class="mt-2 text-sm font-semibold text-white">Ready</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Featured card -->
+						<div class="lg:col-span-5">
+							<div class="rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl overflow-hidden">
+								{featured[0] ? (
+									<a href={`/blog/${featured[0].slug}/`} class="block">
+										<div class="relative h-[260px] sm:h-[300px]">
+											<div class="absolute inset-0 bg-gradient-to-br from-cyan-400/15 via-blue-500/10 to-purple-500/10" />
+											<div
+												class="absolute inset-0"
+												style="background: radial-gradient(circle at 20% 30%, rgba(34,211,238,0.20), rgba(0,0,0,0) 55%);"
+											/>
+											<div class="absolute inset-0 opacity-60" />
+											<div class="relative p-6">
+												<div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-1">
+													<span class="text-xs font-semibold text-neutral-300">{featured[0].data.category}</span>
+												</div>
+												<h2 class="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-white leading-[1.12]">
+													{featured[0].data.title}
+												</h2>
+												<p class="mt-3 text-sm sm:text-base text-neutral-300/90 leading-relaxed">
+													{featured[0].data.description}
+												</p>
+												<div class="mt-5 flex items-center justify-between">
+													<span class="text-xs text-neutral-400">Read in 4–6 min</span>
+													<span class="h-10 w-10 rounded-xl border border-white/10 bg-black/30 grid place-items-center">
+														<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300" aria-hidden="true">
+															<path d="M5 12h14" />
+															<path d="m12 5 7 7-7 7" />
+														</svg>
+													</span>
+												</div>
+											</div>
+										</div>
+									</a>
+								) : (
+									<div class="p-6">
+										<p class="text-neutral-400">No posts yet.</p>
+									</div>
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Category pills -->
+			<section class="mt-6">
+				<div class="mx-auto max-w-7xl px-6">
+					<div class="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar">
+						{categories.map((c) => (
+							<a
+								href={categoryHref(c.id)}
+								class="shrink-0 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-neutral-200 hover:bg-white/10 hover:border-white/20 transition-colors backdrop-blur-md"
+							>
+								{c.label}
+							</a>
+						))}
+					</div>
+				</div>
+			</section>
+
+			<!-- Latest magazine grid -->
+			<section class="mt-10">
+				<div class="mx-auto max-w-7xl px-6">
+					<div class="flex items-end justify-between gap-4 mb-6">
+						<div>
+							<p class="text-xs tracking-[0.24em] uppercase text-neutral-500">Magazine</p>
+							<h2 class="mt-2 text-2xl md:text-3xl font-bold tracking-tight text-white">Latest updates</h2>
+						</div>
+						<a href="/blog" class="hidden md:inline-flex items-center text-sm text-cyan-300 hover:text-cyan-200 transition-colors">
+							See all
+							<svg class="ml-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<path d="M5 12h14" />
+								<path d="m12 5 7 7-7 7" />
+							</svg>
+						</a>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+						{latest.length ? (
+							latest.map((p) => (
+								<article class="group rounded-[22px] border border-white/10 bg-white/5 backdrop-blur-xl overflow-hidden hover:bg-white/10 transition-colors">
+									<a href={`/blog/${p.slug}/`} class="block p-5">
+										<div class="flex items-center justify-between gap-3">
+											<span class="text-xs font-semibold tracking-wide uppercase text-neutral-300">{p.data.category}</span>
+											<span class="h-9 w-9 rounded-xl border border-white/10 bg-black/30 grid place-items-center opacity-80 group-hover:opacity-100 transition-opacity">
+												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-300" aria-hidden="true">
+													<path d="M5 12h14" />
+													<path d="m12 5 7 7-7 7" />
+												</svg>
+											</span>
+										</div>
+										<h3 class="mt-4 text-lg font-bold tracking-tight text-white leading-[1.2] group-hover:text-white">{p.data.title}</h3>
+										<p class="mt-3 text-sm text-neutral-300/90 leading-relaxed">{p.data.description}</p>
+
+										<div class="mt-4 flex items-center justify-between">
+											<span class="text-xs text-neutral-500">{p.data.tags?.[0] ?? 'Makers'}</span>
+											<span class="text-xs text-neutral-400">Read</span>
+										</div>
+									</a>
+								</article>
+							))
+						) : (
+							<p class="text-neutral-400">No posts yet.</p>
+						)}
+					</div>
+				</div>
+			</section>
+
+			<!-- Reader extras -->
+			<section class="mt-10">
+				<div class="mx-auto max-w-7xl px-6">
+					<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+						<div class="lg:col-span-8 rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl p-6 sm:p-7">
+							<div class="flex items-start justify-between gap-4">
+								<div>
+									<p class="text-xs tracking-[0.24em] uppercase text-neutral-500">For readers</p>
+									<h3 class="mt-2 text-xl sm:text-2xl font-bold tracking-tight text-white">What you’ll learn</h3>
+								</div>
+								<span class="hidden sm:inline-flex items-center rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">Actionable by design</span>
+							</div>
+
+							<div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+								<div class="rounded-2xl border border-white/10 bg-black/20 p-4">
+									<p class="text-sm font-semibold text-white">Calibrations</p>
+									<p class="mt-2 text-sm text-neutral-400">Exposure, curing, and failure modes.</p>
+								</div>
+								<div class="rounded-2xl border border-white/10 bg-black/20 p-4">
+									<p class="text-sm font-semibold text-white">AI workflows</p>
+									<p class="mt-2 text-sm text-neutral-400">Prompt patterns + automation.</p>
+								</div>
+								<div class="rounded-2xl border border-white/10 bg-black/20 p-4">
+									<p class="text-sm font-semibold text-white">Hardware notes</p>
+									<p class="mt-2 text-sm text-neutral-400">Thermals, ventilation, reliability.</p>
+								</div>
+							</div>
+
+							<div class="mt-6 rounded-2xl border-2 border-dashed border-white/10 bg-white/5 backdrop-blur-md p-5">
+								<p class="text-sm font-semibold text-neutral-200">In-Article AdSense Placeholder</p>
+								<p class="mt-1 text-xs text-neutral-500">Reserved area (Ad unit) • optimized spacing.</p>
+							</div>
+						</div>
+
+						<aside class="lg:col-span-4">
+							<div class="sticky top-24 space-y-4">
+								<div class="rounded-[22px] border border-white/10 bg-white/5 backdrop-blur-xl p-6 overflow-hidden relative">
+									<div class="absolute inset-0 opacity-60 pointer-events-none" style="background: radial-gradient(circle at 20% 20%, rgba(34,211,238,0.18), rgba(0,0,0,0) 55%);" />
+									<div class="relative">
+										<p class="text-xs tracking-[0.24em] uppercase text-neutral-500">Trending</p>
+										<h4 class="mt-2 text-lg font-bold tracking-tight text-white">Most recent</h4>
+										<ul class="mt-5 space-y-3">
+											{recent.map((p) => (
+												<li class="flex items-start gap-3">
+													<span class="mt-1 h-2 w-2 rounded-full bg-purple-400/70" aria-hidden="true" />
+													<a href={`/blog/${p.slug}/`} class="text-sm text-neutral-200 hover:text-white transition-colors">
+														{p.data.title}
+														<div class="mt-1 text-xs text-neutral-500">{p.data.category}</div>
+													</a>
+												</li>
+											))}
+										</ul>
+									</div>
+								</div>
+
+								<div class="rounded-[22px] border border-white/10 bg-white/5 backdrop-blur-xl p-6">
+									<p class="text-xs tracking-[0.24em] uppercase text-neutral-500">Subscribe</p>
+									<h5 class="mt-2 text-lg font-bold tracking-tight text-white">Weekly maker briefs</h5>
+									<p class="mt-2 text-sm text-neutral-400">Minimal inbox. Maximum build confidence.</p>
+									<form class="mt-5 flex gap-3" action="#" method="post">
+										<input
+											type="email"
+											placeholder="you@domain.com"
+											name="email"
+											required
+											class="w-full h-11 rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white placeholder:text-neutral-500 outline-none focus:border-white/25"
+										/>
+										<button
+											type="submit"
+											class="h-11 px-5 rounded-xl bg-white text-black font-semibold tracking-tight hover:brightness-95 transition-colors"
+										>
+											Join
+										</button>
+									</form>
+								</div>
+							</div>
+						</aside>
+					</div>
+				</div>
+			</section>
 		</main>
-		<Footer />
+
+		<div class="relative z-50">
+			<Footer />
+		</div>
 	</body>
 </html>
+

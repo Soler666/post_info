@@ -1,6 +1,11 @@
-import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import sanitizeHtml from 'sanitize-html'; // Importar sanitize-html
+
+import MarkdownIt from 'markdown-it'; // Importar markdown-it
+const parser = new MarkdownIt();
+
 
 export async function GET(context) {
 	const posts = await getCollection('blog');
@@ -10,7 +15,8 @@ export async function GET(context) {
 		site: context.site,
 		items: posts.map((post) => ({
 			...post.data,
-			link: `/blog/${post.id}/`,
+			link: `/blog/${post.slug}/`,
+			content: sanitizeHtml(parser.render(post.body)),
 		})),
 	});
 }

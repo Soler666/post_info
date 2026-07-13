@@ -2,34 +2,23 @@
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig, fontProviders } from 'astro/config';
+import { defineConfig } from 'astro/config';
+
+
+// NOTE: Tu versión de Astro no expone fontProviders en astro/config.
+// Para evitar que falle la config SSR, desactivamos el bloque fonts aquí.
+
+import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
-	integrations: [mdx(), sitemap()],
-	fonts: [
-		{
-			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
-			fallbacks: ['sans-serif'],
-			options: {
-				variants: [
-					{
-						src: ['./src/assets/fonts/atkinson-regular.woff'],
-						weight: 400,
-						style: 'normal',
-						display: 'swap',
-					},
-					{
-						src: ['./src/assets/fonts/atkinson-bold.woff'],
-						weight: 700,
-						style: 'normal',
-						display: 'swap',
-					},
-				],
-			},
-		},
-	],
+  site: 'https://www.nextgenmakers.com',
+  output: 'static',
+integrations: [tailwind(), mdx()],
+	// Temporariamente desactivamos sitemap durante el refactor para evitar errores por metadata/paths.
+	// Se reactivará cuando el sitio esté estable.
+
+
+
+
 });

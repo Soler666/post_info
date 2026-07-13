@@ -1,0 +1,41 @@
+---
+
+import { ViewTransitions } from 'astro:transitions';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en" class="scroll-smooth bg-black antialiased">
+	<head>
+		<BaseHead title={title} description={description} />
+		<ViewTransitions />
+
+	</head>
+
+	<body
+		class="min-h-screen flex-col selection:bg-white selection:text-black relative flex overflow-x-hidden bg-black font-sans text-neutral-400"
+	>
+		<!-- Background architecture grid -->
+		<div
+			class="bg-[linear-gradient(to_right,#7dd3fc0f_1px,transparent_1px),linear-gradient(to_bottom,#a78bfa0f_1px,transparent_1px)] bg-[size:26px_26px] fixed inset-0 z-0 pointer-events-none"
+		/>
+
+		<Header />
+
+		<main class="relative z-10 w-full flex-grow pt-24">
+			<article class="prose prose-invert prose-lg mx-auto max-w-3xl px-6">
+				<slot />
+			</article>
+		</main>
+
+		<Footer />
+	</body>
+</html>
