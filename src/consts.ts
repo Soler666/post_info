@@ -3,4 +3,4 @@
 
 export const SITE_TITLE = 'Next-Gen Makers';
 export const SITE_DESCRIPTION =
-	'Advanced Resin 3D Printing, AI Workflows for Creators, and Tech Hardware.';
+	'A modern tech magazine covering resin 3D printing, AI workflows, and hardware for makers and builders.';

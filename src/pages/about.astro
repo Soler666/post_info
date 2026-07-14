@@ -4,20 +4,62 @@ import { SITE_TITLE } from '../consts';
 ---
 
 <Layout
-	title={`About ${SITE_TITLE}`}
-	description={`Learn more about ${SITE_TITLE}, a premium content website for advanced resin 3D printing, AI workflows, and tech hardware.`}
+	title={`About — ${SITE_TITLE}`}
+	description={`Learn more about ${SITE_TITLE} — a modern tech magazine for makers, builders, and hardware enthusiasts.`}
 >
-	<h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight">
-		About Next-Gen Makers
-	</h1>
-	<p>
-		<strong>Next-Gen Makers</strong> is a production-grade, highly optimized content website
-		targeting the US market to monetize via Google AdSense. The niche is focused on "Next-Gen
-		Makers" — advanced resin 3D printing, AI workflows for creators, and tech hardware.
-	</p>
+	<section class="border-b border-slate-200 bg-white">
+		<div class="mx-auto max-w-6xl px-6 py-16">
+			<p class="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">About</p>
+			<h1 class="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+				Building a smarter space for tech & maker culture
+			</h1>
+		</div>
+	</section>
 
-	<p>
-		Our goal is to refactor the default Astro Blog template into a premium, hyper-modern, Silicon
-		Valley-style web application (think Vercel, Linear, or Stripe design language).
-	</p>
+	<section class="py-16">
+		<div class="mx-auto max-w-3xl px-6">
+			<div class="space-y-6 text-base leading-relaxed text-slate-600">
+				<p>
+					<strong class="text-slate-900">{SITE_TITLE}</strong> is a modern tech magazine focused on resin 3D printing,
+					AI-powered workflows for creators, and the hardware that drives innovation. We publish clear, practical
+					content for makers, engineers, and anyone curious about where technology is heading.
+				</p>
+				<p>
+					Our mission is simple: cut through the noise and deliver articles that are useful, honest, and well-crafted
+					— the kind of reading experience you'd expect from a professional product, not a generic blog template.
+				</p>
+				<p>
+					Whether you're tuning a resin printer, exploring AI tools for your creative workflow, or comparing the latest
+					hardware, you'll find thoughtful analysis and actionable takeaways here.
+				</p>
+			</div>
+
+			<div class="mt-12 grid gap-6 sm:grid-cols-3">
+				<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+					<p class="text-2xl font-bold text-blue-600">01</p>
+					<h2 class="mt-2 font-semibold text-slate-900">Deep dives</h2>
+					<p class="mt-2 text-sm text-slate-600">In-depth articles on tech topics that matter to builders.</p>
+				</div>
+				<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+					<p class="text-2xl font-bold text-blue-600">02</p>
+					<h2 class="mt-2 font-semibold text-slate-900">Practical guides</h2>
+					<p class="mt-2 text-sm text-slate-600">Step-by-step workflows you can apply right away.</p>
+				</div>
+				<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+					<p class="text-2xl font-bold text-blue-600">03</p>
+					<h2 class="mt-2 font-semibold text-slate-900">Honest reviews</h2>
+					<p class="mt-2 text-sm text-slate-600">Straightforward hardware and tool evaluations.</p>
+				</div>
+			</div>
+
+			<div class="mt-12">
+				<a
+					href="/contact"
+					class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+				>
+					Get in touch
+				</a>
+			</div>
+		</div>
+	</section>
 </Layout>

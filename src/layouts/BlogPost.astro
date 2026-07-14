@@ -1,75 +1,65 @@
 ---
-import { Image } from 'astro:assets';
-
-
-import { ViewTransitions } from 'astro:transitions';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import { ViewTransitions } from 'astro:transitions';
 
 type Props = CollectionEntry<'blog'>['data'];
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+
+const imageSrc =
+	typeof heroImage === 'string'
+		? heroImage
+		: (heroImage as { src?: string } | undefined)?.src;
 ---
 
-<html lang="en" class="scroll-smooth bg-black antialiased">
+<html lang="en" class="scroll-smooth">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={imageSrc} />
 		<ViewTransitions />
-
 	</head>
 
-	<body class="text-neutral-400 font-sans min-h-screen flex flex-col selection:bg-white selection:text-black relative overflow-x-hidden">
-		<!-- Background architecture grid -->
-		<div class="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(to_right,#7dd3fc0f_1px,transparent_1px),linear-gradient(to_bottom,#a78bfa0f_1px,transparent_1px)] bg-[size:26px_26px]" />
-
+	<body class="flex min-h-screen flex-col bg-slate-50 text-slate-800 selection:bg-blue-600 selection:text-white">
 		<Header />
 
-		<main class="flex-grow w-full relative z-10 pt-24">
+		<main class="w-full flex-grow pt-20 pb-16">
 			<article class="mx-auto max-w-3xl px-6">
-				<!-- Header del Post -->
-				<header class="text-center">
-					<h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight">
+				<header class="mb-10 text-center">
+					<p class="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">Article</p>
+					<h1 class="mt-4 text-4xl font-bold leading-tight tracking-tight text-slate-900 md:text-5xl">
 						{title}
 					</h1>
-					<div class="mt-4 text-sm text-neutral-400">
-						<span>Publicado el <FormattedDate date={pubDate} /></span>
+					<div class="mt-5 text-sm text-slate-500">
+						<span>Published <FormattedDate date={pubDate} /></span>
 						{
 							updatedDate && (
 								<span class="italic">
-									{' • '}Actualizado el <FormattedDate date={updatedDate} />
+									{' • '}
+									Updated <FormattedDate date={updatedDate} />
 								</span>
 							)
 						}
 					</div>
 				</header>
 
-<!-- Imagen de Portada -->
 				{
-					heroImage && (
-						<div class="mt-8 relative">
+					imageSrc && (
+						<div class="mb-10 overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
 							<img
-								src={heroImage as string}
-									alt={`Cover image for ${title}`}
-									loading="lazy"
-									class="w-full h-auto rounded-2xl border border-white/10"
+								src={imageSrc}
+								alt={`Cover image for ${title}`}
+								loading="lazy"
+								width="896"
+								height="448"
+								class="h-auto w-full object-cover"
 							/>
-							<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl" />
 						</div>
 					)
 				}
 
-
-				<!-- Placeholder para AdSense (debajo del título/imagen) -->
-				<div class="w-full h-32 bg-neutral-900 border border-dashed border-neutral-700 flex items-center justify-center text-neutral-500 rounded-xl my-8">
-					AdSense Placeholder
-				</div>
-
-				<!-- Contenido del Post -->
-				<div class="prose prose-invert prose-lg max-w-none prose-p:text-neutral-400 prose-headings:text-white prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-code:bg-neutral-900 prose-code:text-cyan-300 prose-code:p-1 prose-code:rounded-md prose-blockquote:border-l-cyan-400">
-					<slot />
-				</div>
+				<slot />
 			</article>
 		</main>
 

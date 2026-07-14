@@ -4,29 +4,19 @@ interface Props {
 }
 
 const { date } = Astro.props;
+
 const normalized = typeof date === 'string' ? new Date(date) : date;
 
-function isValid(d: unknown): d is Date {
-	return d instanceof Date && !Number.isNaN(d.getTime());
-}
+const formatted =
+	normalized instanceof Date && !Number.isNaN(normalized.getTime())
+		? normalized.toLocaleDateString('en-US', {
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric',
+			})
+		: '';
 ---
 
-
-<time datetime={isValid(normalized) ? normalized.toISOString() : undefined}>
-
-	{isValid(normalized)
-		? normalized.toLocaleDateString('en-us', {
-				year: 'numeric',
-				month: 'short',
-				day: 'numeric',
-			})
-		: ''}
-
-	{''}
-
-		year: 'numeric',
-		month: 'short',
-		day: 'numeric',
-	})}
+<time datetime={normalized instanceof Date ? normalized.toISOString() : undefined}>
+	{formatted}
 </time>
-

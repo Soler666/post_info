@@ -1,21 +1,21 @@
-# TODO - Refactor “Next-Gen Makers” (Astro + Tailwind)
+# TODO - Refactor a Blog/Revista minimalista (Astro)
 
-## Paso 1 — UI base
-- [x] Actualizar `src/styles/global.css` para alinearlo con ultra-dark y evitar estilos heredados de Bear Blog que pelean con Tailwind.
-
-
-## Paso 2 — Shell del producto
-- [x] Reemplazar `src/components/Header.astro` por versión premium sticky con blur al scrollear + CTA.
-
-- [x] Reemplazar `src/components/Footer.astro` por footer multi-columna black + border + enlaces legales dummy.
+## Paso 1: Limpieza de tema
+- [x] Revisar layouts actuales y páginas conectadas al feed (/blog)
+- [x] Editar `src/layouts/PageLayout.astro` para eliminar fondos oscuros/gradientes y usar tema claro
+- [x] Editar `src/components/Header.astro` para eliminar botones y estilos futuristas
 
 
+## Paso 2: Nuevo diseño
+- [x] Reemplazar `src/pages/index.astro` por una home tipo revista (blanca/limpia)
 
-## Paso 3 — Homepage nivel empresa
-- [ ] Rehacer completamente `src/pages/index.astro` con estructura tipo SaaS/empresa (Hero + Social proof + Problem/Solution + Category Bento + How it works + FAQ + CTA final).
-- [ ] Eliminar keyframes/animaciones pesadas del HTML y usar solo Tailwind transitions/animate utilities.
+- [x] Reemplazar `src/pages/blog/index.astro` con grid 2 columnas (feed 70% + sidebar 30%)
 
-## Paso 4 — Validación
-- [ ] Ejecutar `npm run build` y revisar errores.
-- [ ] Revisar en navegador: layout, responsividad y enlaces.
+  - [x] Tarjetas de noticia: imagen grande, título, fecha, extracto, “Leer más”
+  - [x] Sidebar: buscador simple (UI) + últimas vistos + archivo/categorías
+
+## Paso 3: Verificación
+- [x] Ejecutar `npm run build` (o comando equivalente) y corregir errores
+- [x] Revisar que no se rompe el render de Markdown/MDX del content collection
+
 
